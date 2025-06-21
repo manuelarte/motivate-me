@@ -1,14 +1,15 @@
 mod payloads;
 
-use axum::{
-    routing::{get, post},
-    http::StatusCode, Router,
-};
+use crate::payloads::{ForkPayload, StarPayload};
 use axum::body::Bytes;
 use axum::http::HeaderMap;
 use axum::response::IntoResponse;
+use axum::{
+    Router,
+    http::StatusCode,
+    routing::{get, post},
+};
 use serde::{Deserialize, Serialize};
-use crate::payloads::{ForkPayload, StarPayload};
 
 #[tokio::main]
 async fn main() {
@@ -32,20 +33,19 @@ async fn root() -> &'static str {
     "Hello, World!"
 }
 
-async fn github_webhook(
-    headers: HeaderMap,
-    body: Bytes,
-) -> impl IntoResponse {
+async fn github_webhook(headers: HeaderMap, body: Bytes) -> impl IntoResponse {
     let event = headers.get("X-GitHub-Event").and_then(|v| v.to_str().ok());
     // add logs
     match event {
         Some("star") => {
             match serde_json::from_slice::<StarPayload>(&body) {
                 Ok(payload) => {
-                    // handle star payload
                     (StatusCode::OK, format!("Star event: {payload:?}"))
                 }
-                Err(e) => (StatusCode::BAD_REQUEST, format!("Invalid star payload: {e}")),
+                Err(e) => (
+                    StatusCode::BAD_REQUEST,
+                    format!("Invalid star payload: {e}"),
+                ),
             }
         }
         Some("fork") => {
@@ -54,7 +54,10 @@ async fn github_webhook(
                     // handle fork payload
                     (StatusCode::OK, format!("Fork event: {payload:?}"))
                 }
-                Err(e) => (StatusCode::BAD_REQUEST, format!("Invalid fork payload: {e}")),
+                Err(e) => (
+                    StatusCode::BAD_REQUEST,
+                    format!("Invalid fork payload: {e}"),
+                ),
             }
         }
         Some(other) => (

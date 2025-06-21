@@ -1,5 +1,5 @@
-use std::time::SystemTime;
 use serde::Deserialize;
+use std::time::SystemTime;
 
 trait WebhookPayload {}
 
@@ -10,55 +10,25 @@ pub struct Repository {
     name: String,
 }
 
-impl Repository {
-    fn new(id: i32, full_name: String, name: String) -> Repository {
-        Repository{
-            id,
-            full_name,
-            name,
-        }
-    }
-}
-
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct GithubUser {
     id: i32,
-    login: String
-}
-
-impl GithubUser {
-    fn new(id: i32, login: String) -> GithubUser {
-        GithubUser{
-            id,
-            login
-        }
-    }
+    login: String,
 }
 
 #[derive(Debug, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")] // Converts enum variants to lowercase
 pub enum StarAction {
-    Created, Deleted
+    Created,
+    Deleted,
 }
-
 
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct StarPayload {
     action: StarAction,
     repository: Repository,
     sender: GithubUser,
-    starred_at: Option<SystemTime>
-}
-
-impl StarPayload {
-    fn new(action: StarAction, repository: Repository, sender: GithubUser, starred_at: Option<SystemTime>) -> StarPayload {
-        StarPayload{
-            action,
-            repository,
-            sender,
-            starred_at,
-        }
-    }
+    starred_at: Option<SystemTime>,
 }
 
 impl WebhookPayload for StarPayload {}
@@ -75,45 +45,19 @@ pub struct Forkee {
     url: String,
 }
 
-impl Forkee {
-    fn new(description: String, forks_count: i32, full_name: String, id: i32, name: String, private: bool,
-           stargazers_count: i32, url: String) -> Forkee {
-        Forkee{
-            description,
-            forks_count,
-            full_name,
-            id,
-            name,
-            private,
-            stargazers_count,
-            url
-        }
-    }
-}
-
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct ForkPayload {
     forkee: Forkee,
     repository: Repository,
-    sender: GithubUser
+    sender: GithubUser,
 }
 
 impl WebhookPayload for ForkPayload {}
 
-impl ForkPayload {
-    fn new(forkee: Forkee, repository: Repository, sender: GithubUser) -> ForkPayload {
-        ForkPayload{
-            forkee,
-            repository,
-            sender
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use crate::payloads::StarAction::Created;
     use super::*;
+    use crate::payloads::StarAction::Created;
 
     #[test]
     fn deserialize_star_payload() {
@@ -132,9 +76,21 @@ mod tests {
         }
         "#;
         let actual: StarPayload = serde_json::from_str(json).unwrap();
-        let repository = Repository::new(123456, "manuelarte/motivate-me".to_owned(), "motivate-me".to_owned());
-        let sender = GithubUser::new(1, "octocat".to_owned());
-        let expected = StarPayload::new(Created, repository, sender, None);
+        let repository = Repository {
+            id: 123456,
+            full_name: "manuelarte/motivate-me".to_owned(),
+            name: "motivate-me".to_owned(),
+        };
+        let sender = GithubUser {
+            id: 1,
+            login: "octocat".to_owned(),
+        };
+        let expected = StarPayload {
+            action: Created,
+            repository,
+            sender,
+            starred_at: None,
+        };
         assert_eq!(actual, expected)
     }
 
@@ -164,13 +120,30 @@ mod tests {
         }
         "#;
         let actual: ForkPayload = serde_json::from_str(json).unwrap();
-        let forkee: Forkee = Forkee::new("motivate-me repo".to_owned(), 1,
-                                         "octocat/motivate-me".to_owned(), 654321,
-                                         "motivate-me".to_owned(), false, 10,
-                                         "https://github.com/manuelarte/motivate-me".to_owned());
-        let repository = Repository::new(123456, "manuelarte/motivate-me".to_owned(), "motivate-me".to_owned());
-        let sender = GithubUser::new(1, "octocat".to_owned());
-        let expected = ForkPayload::new(forkee, repository, sender);
+        let forkee: Forkee = Forkee {
+            description: "motivate-me repo".to_owned(),
+            forks_count: 1,
+            full_name: "octocat/motivate-me".to_owned(),
+            id: 654321,
+            name: "motivate-me".to_owned(),
+            private: false,
+            stargazers_count: 10,
+            url: "https://github.com/manuelarte/motivate-me".to_owned(),
+        };
+        let repository = Repository {
+            id: 123456,
+            full_name: "manuelarte/motivate-me".to_owned(),
+            name: "motivate-me".to_owned(),
+        };
+        let sender = GithubUser {
+            id: 1,
+            login: "octocat".to_owned(),
+        };
+        let expected = ForkPayload {
+            forkee,
+            repository,
+            sender,
+        };
         assert_eq!(actual, expected)
     }
 }
