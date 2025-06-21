@@ -9,7 +9,6 @@ use axum::{
     http::StatusCode,
     routing::{get, post},
 };
-use serde::{Deserialize, Serialize};
 
 #[tokio::main]
 async fn main() {
@@ -37,17 +36,13 @@ async fn github_webhook(headers: HeaderMap, body: Bytes) -> impl IntoResponse {
     let event = headers.get("X-GitHub-Event").and_then(|v| v.to_str().ok());
     // add logs
     match event {
-        Some("star") => {
-            match serde_json::from_slice::<StarPayload>(&body) {
-                Ok(payload) => {
-                    (StatusCode::OK, format!("Star event: {payload:?}"))
-                }
-                Err(e) => (
-                    StatusCode::BAD_REQUEST,
-                    format!("Invalid star payload: {e}"),
-                ),
-            }
-        }
+        Some("star") => match serde_json::from_slice::<StarPayload>(&body) {
+            Ok(payload) => (StatusCode::OK, format!("Star event: {payload:?}")),
+            Err(e) => (
+                StatusCode::BAD_REQUEST,
+                format!("Invalid star payload: {e}"),
+            ),
+        },
         Some("fork") => {
             match serde_json::from_slice::<ForkPayload>(&body) {
                 Ok(payload) => {
@@ -69,17 +64,4 @@ async fn github_webhook(headers: HeaderMap, body: Bytes) -> impl IntoResponse {
             "Missing X-GitHub-Event header".to_owned(),
         ),
     }
-}
-
-// the input to our `create_user` handler
-#[derive(Deserialize)]
-struct CreateUser {
-    username: String,
-}
-
-// the output to our `create_user` handler
-#[derive(Serialize)]
-struct User {
-    id: u64,
-    username: String,
 }
