@@ -9,9 +9,29 @@ use axum::{
     http::StatusCode,
     routing::{get, post},
 };
+use config::Config;
+use serde::Deserialize;
+use tracing::{info, instrument};
+
+#[derive(Deserialize, Debug)]
+struct AppConfig {
+    debug: bool,
+    secret: String,
+}
 
 #[tokio::main]
 async fn main() {
+    let app_config = Config::builder()
+        // Add in `./Settings.toml`
+        .add_source(config::File::with_name("Settings"))
+        // Add in settings from the environment (with a prefix of APP)
+        // Eg.. `APP_DEBUG=1 ./target/app` would set the `debug` key
+        .add_source(config::Environment::with_prefix("MOTIVATE_ME"))
+        .build()
+        .unwrap()
+        .try_deserialize::<AppConfig>()
+        .unwrap();
+
     // initialize tracing
     tracing_subscriber::fmt::init();
 
@@ -32,7 +52,9 @@ async fn root() -> &'static str {
     "Hello, World!"
 }
 
+#[instrument]
 async fn github_webhook(headers: HeaderMap, body: Bytes) -> impl IntoResponse {
+    info!("new github webhook received");
     let event = headers.get("X-GitHub-Event").and_then(|v| v.to_str().ok());
     // add logs
     match event {

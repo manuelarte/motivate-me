@@ -1,0 +1,16 @@
+POST http://localhost:3000/github_webhook
+X-GitHub-Event: star
+Content-Type: application/json
+
+{
+  "action": "created",
+  "repository": {
+    "id": 123456,
+    "name": "motivate-me",
+    "full_name": "manuelarte/motivate-me"
+  },
+  "sender": {
+    "id": 1,
+    "login": "octocat"
+  }
+}
