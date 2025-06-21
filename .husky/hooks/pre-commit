@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cargo fmt
+cargo clippy
 markdownlint-cli2 ./**/*.md
 codespell .
 yamllint .

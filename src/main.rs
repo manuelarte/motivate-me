@@ -11,7 +11,8 @@ use axum::{
 };
 use config::Config;
 use serde::Deserialize;
-use tracing::{info, instrument};
+use std::io;
+use tracing::{debug, error, info, instrument};
 
 #[derive(Deserialize, Debug)]
 struct AppConfig {
@@ -33,7 +34,7 @@ async fn main() {
         .unwrap();
 
     // initialize tracing
-    tracing_subscriber::fmt::init();
+    tracing_subscriber::fmt().with_writer(io::stderr).init();
 
     // build our application with a route
     let app = Router::new()
@@ -59,24 +60,31 @@ async fn github_webhook(headers: HeaderMap, body: Bytes) -> impl IntoResponse {
     // add logs
     match event {
         Some("star") => match serde_json::from_slice::<StarPayload>(&body) {
-            Ok(payload) => (StatusCode::OK, format!("Star event: {payload:?}")),
-            Err(e) => (
-                StatusCode::BAD_REQUEST,
-                format!("Invalid star payload: {e}"),
-            ),
+            Ok(payload) => {
+                debug!("star event processed");
+                (StatusCode::OK, format!("Star event: {payload:?}"))
+            }
+            Err(e) => {
+                error!("{}: {}", "star event can't be processed", e.to_string());
+                (
+                    StatusCode::BAD_REQUEST,
+                    format!("Invalid star payload: {e}"),
+                )
+            }
         },
-        Some("fork") => {
-            match serde_json::from_slice::<ForkPayload>(&body) {
-                Ok(payload) => {
-                    // handle fork payload
-                    (StatusCode::OK, format!("Fork event: {payload:?}"))
-                }
-                Err(e) => (
+        Some("fork") => match serde_json::from_slice::<ForkPayload>(&body) {
+            Ok(payload) => {
+                debug!("fork event processed");
+                (StatusCode::OK, format!("Fork event: {payload:?}"))
+            }
+            Err(e) => {
+                error!("{}: {}", "fork event can't be processed", e.to_string());
+                (
                     StatusCode::BAD_REQUEST,
                     format!("Invalid fork payload: {e}"),
-                ),
+                )
             }
-        }
+        },
         Some(other) => (
             StatusCode::BAD_REQUEST,
             format!("Unsupported event type: {other}"),
