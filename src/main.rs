@@ -41,7 +41,9 @@ async fn main() {
         .route("/github_webhook", post(github_webhook));
 
     info!("{}: {}", "Starting web server in", app_config.host);
-    let listener = tokio::net::TcpListener::bind(app_config.host).await.unwrap();
+    let listener = tokio::net::TcpListener::bind(app_config.host)
+        .await
+        .unwrap();
     axum::serve(listener, app).await.unwrap();
 }
 
