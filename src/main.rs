@@ -2,7 +2,9 @@ mod payloads;
 mod signature_validator;
 
 use crate::payloads::{ForkPayload, StarPayload};
-use crate::signature_validator::{get_signature_validator, AlwaysTrueValidator, SignatureValidator};
+use crate::signature_validator::{
+    AlwaysTrueValidator, SignatureValidator, get_signature_validator,
+};
 use axum::body::Bytes;
 use axum::extract::State;
 use axum::http::HeaderMap;

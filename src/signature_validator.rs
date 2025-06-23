@@ -1,8 +1,8 @@
+use crate::AppConfig;
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
 use std::fmt::Debug;
 use std::sync::Arc;
-use crate::AppConfig;
 
 pub trait SignatureValidator: Send + Sync + Debug + 'static {
     fn validate(&self, payload: &[u8], expected_signature: &str) -> bool;
