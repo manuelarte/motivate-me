@@ -1,5 +1,6 @@
 mod notifier;
 mod payloads;
+mod raspberrypi_notifier;
 mod signature_validator;
 
 use crate::notifier::{EmptyNotifier, Notifier};
