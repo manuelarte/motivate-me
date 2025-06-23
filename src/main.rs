@@ -1,6 +1,8 @@
+mod notifier;
 mod payloads;
 mod signature_validator;
 
+use crate::notifier::{EmptyNotifier, Notifier};
 use crate::payloads::{ForkPayload, StarPayload};
 use crate::signature_validator::{
     AlwaysTrueValidator, SignatureValidator, get_signature_validator,
@@ -31,6 +33,7 @@ struct AppConfig {
 #[derive(Debug, Clone)]
 struct AppState {
     signature_validator: Arc<dyn SignatureValidator>,
+    notifier: Arc<dyn Notifier>,
 }
 
 #[tokio::main]
@@ -49,9 +52,11 @@ async fn main() {
     tracing_subscriber::fmt().with_writer(io::stderr).init();
 
     let signature_validator = get_signature_validator(&app_config);
+    let notifier = Arc::new(EmptyNotifier::new());
 
     let app_state = AppState {
         signature_validator,
+        notifier,
     };
 
     let app = Router::new()

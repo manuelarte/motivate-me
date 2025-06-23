@@ -12,8 +12,8 @@ pub trait SignatureValidator: Send + Sync + Debug + 'static {
 pub struct AlwaysTrueValidator {}
 
 impl AlwaysTrueValidator {
-    pub fn new() -> AlwaysTrueValidator {
-        AlwaysTrueValidator {}
+    pub fn new() -> Self {
+        Self {}
     }
 }
 
@@ -29,8 +29,8 @@ pub struct Rsa256SignatureValidator {
 }
 
 impl Rsa256SignatureValidator {
-    pub fn new(secret: &str) -> Rsa256SignatureValidator {
-        Rsa256SignatureValidator {
+    pub fn new(secret: &str) -> Self {
+        Self {
             secret: secret.to_string(),
         }
     }
