@@ -4,9 +4,7 @@ mod signature_validator;
 
 use crate::notifier::{EmptyNotifier, Notifier};
 use crate::payloads::{ForkPayload, StarPayload};
-use crate::signature_validator::{
-    AlwaysTrueValidator, SignatureValidator, get_signature_validator,
-};
+use crate::signature_validator::{SignatureValidator, get_signature_validator};
 use axum::body::Bytes;
 use axum::extract::State;
 use axum::http::HeaderMap;
