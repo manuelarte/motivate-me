@@ -10,6 +10,7 @@ use crate::notifier::{Notifier, NotifierError};
 #[derive(Debug)]
 pub struct RaspberryPiNotifier {}
 
+#[cfg(target_arch = "arm")]
 impl RaspberryPiNotifier {
     pub fn new() -> Self {
         RaspberryPiNotifier {}
@@ -23,7 +24,10 @@ impl Notifier for RaspberryPiNotifier {
 
         // Gpio uses BCM pin numbering. BCM GPIO 23 is tied to physical pin 16.
         const GPIO_LED: u8 = 23;
-        println!("Blinking an LED on a {}.", DeviceInfo::new().unwrap().model());
+        println!(
+            "Blinking an LED on a {}.",
+            DeviceInfo::new().unwrap().model()
+        );
 
         let mut pin = Gpio::new().unwrap().get(GPIO_LED).unwrap().into_output();
 
