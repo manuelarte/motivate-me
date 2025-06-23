@@ -279,11 +279,8 @@ mod tests {
         }
         "#;
         let actual: Result<StarPayload, Error> = serde_json::from_str(json);
-        match &actual {
-            Err(e) => {
-                println!("{}", e)
-            }
-            _ => {}
+        if let Err(e) = &actual {
+            println!("{}", e)
         }
         assert!(actual.is_ok())
     }

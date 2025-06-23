@@ -64,6 +64,6 @@ mod tests {
         let signature_validator = Rsa256SignatureValidator::new("It's a Secret to Everybody");
         let expected_signature = "757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17";
         let result = signature_validator.validate("Hello, World!".as_bytes(), expected_signature);
-        assert_eq!(result, true);
+        assert!(result);
     }
 }
