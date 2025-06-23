@@ -1,5 +1,6 @@
 mod notifier;
 mod payloads;
+#[cfg(target_arch = "arm")]
 mod raspberrypi_notifier;
 mod signature_validator;
 

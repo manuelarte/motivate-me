@@ -1,23 +1,18 @@
+use crate::notifier::{Notifier, NotifierError};
+use rppal::gpio::Gpio;
+use rppal::system::DeviceInfo;
 use std::thread;
 use std::time::Duration;
-#[cfg(target_arch = "arm")]
-use rppal::gpio::Gpio;
-#[cfg(target_arch = "arm")]
-use rppal::system::DeviceInfo;
-use crate::notifier::{Notifier, NotifierError};
 
-#[cfg(target_arch = "arm")]
 #[derive(Debug)]
 pub struct RaspberryPiNotifier {}
 
-#[cfg(target_arch = "arm")]
 impl RaspberryPiNotifier {
     pub fn new() -> Self {
-        RaspberryPiNotifier {}
+        Self {}
     }
 }
 
-#[cfg(target_arch = "arm")]
 impl Notifier for RaspberryPiNotifier {
     fn sign(&self, _: String) -> Result<(), NotifierError> {
         println!("RaspberryPiNotifier::sign");
