@@ -1,6 +1,5 @@
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
-use std::time::SystemTime;
 
 trait WebhookPayload {}
 
