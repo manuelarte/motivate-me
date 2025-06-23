@@ -2,7 +2,7 @@ mod payloads;
 mod signature_validator;
 
 use crate::payloads::{ForkPayload, StarPayload};
-use crate::signature_validator::{AlwaysTrueValidator, SignatureValidator};
+use crate::signature_validator::{get_signature_validator, AlwaysTrueValidator, SignatureValidator};
 use axum::body::Bytes;
 use axum::extract::State;
 use axum::http::HeaderMap;
@@ -20,8 +20,9 @@ use tracing::{debug, error, info, instrument};
 
 #[derive(Deserialize, Debug, Clone)]
 struct AppConfig {
-    host: String,
     debug: bool,
+    environment: String,
+    host: String,
     secret: String,
 }
 
@@ -45,7 +46,7 @@ async fn main() {
 
     tracing_subscriber::fmt().with_writer(io::stderr).init();
 
-    let signature_validator = Arc::new(AlwaysTrueValidator::new());
+    let signature_validator = get_signature_validator(&app_config);
 
     let app_state = AppState {
         signature_validator,
@@ -80,7 +81,9 @@ async fn github_webhook(
         .and_then(|v| v.to_str().ok());
     match signature {
         Some(signature) => {
-            state.signature_validator.validate(signature);
+            state
+                .signature_validator
+                .validate(body.iter().as_slice(), signature);
             let event = headers.get("X-GitHub-Event").and_then(|v| v.to_str().ok());
             // add logs
             match event {
