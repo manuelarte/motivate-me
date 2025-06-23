@@ -16,16 +16,12 @@ impl EmptyNotifier {
 }
 
 impl Notifier for EmptyNotifier {
-    fn sign(&self, event: String) -> Result<(), NotifierError> {
-        for i in 1..10 {
-            println!("hi number {i} from the spawned thread!");
-            thread::sleep(Duration::from_millis(500));
-        }
-
+    fn sign(&self, _: String) -> Result<(), NotifierError> {
         Ok(())
     }
 }
 
+#[derive(Debug)]
 pub enum NotifierError {
     Failed,
 }
