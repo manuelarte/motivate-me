@@ -1,5 +1,4 @@
 use std::fmt::Debug;
-
 pub trait SignatureValidator: Send + Sync + Debug + 'static {
     fn validate(&self, secret: &str) -> bool;
 }

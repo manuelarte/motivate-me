@@ -4,8 +4,10 @@ mod signature_validator;
 use crate::payloads::{ForkPayload, StarPayload};
 use crate::signature_validator::{AlwaysTrueValidator, SignatureValidator};
 use axum::body::Bytes;
+use axum::extract::State;
 use axum::http::HeaderMap;
 use axum::response::IntoResponse;
+use axum::serve::IncomingStream;
 use axum::{
     Router,
     http::StatusCode,
@@ -14,9 +16,7 @@ use axum::{
 use config::Config;
 use serde::Deserialize;
 use std::io;
-use std::rc::Rc;
 use std::sync::Arc;
-use axum::extract::State;
 use tracing::{debug, error, info, instrument};
 
 #[derive(Deserialize, Debug, Clone)]
@@ -48,11 +48,14 @@ async fn main() {
 
     let signature_validator = Arc::new(AlwaysTrueValidator::new());
 
-    let app_state = AppState {signature_validator};
+    let app_state = AppState {
+        signature_validator,
+    };
+
     let app = Router::new()
-        .with_state(app_state)
         .route("/", get(root))
-        .route("/github_webhook", post(github_webhook));
+        .route("/github_webhook", post(github_webhook))
+        .with_state(app_state.clone());
 
     info!("{}: {}", "Starting web server in", app_config.host);
     let listener = tokio::net::TcpListener::bind(app_config.host)
@@ -67,10 +70,16 @@ async fn root() -> &'static str {
 }
 
 #[instrument]
-async fn github_webhook(State(state): State<AppState>, headers: HeaderMap, body: Bytes) -> impl IntoResponse {
+async fn github_webhook(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    body: Bytes,
+) -> impl IntoResponse {
     info!("new github webhook received");
-    let signature = headers.get("X-Hub-Signature-256").and_then(|v| v.to_str().ok());
-    match signature { 
+    let signature = headers
+        .get("X-Hub-Signature-256")
+        .and_then(|v| v.to_str().ok());
+    match signature {
         Some(signature) => {
             state.signature_validator.validate(signature);
             let event = headers.get("X-GitHub-Event").and_then(|v| v.to_str().ok());
@@ -114,10 +123,7 @@ async fn github_webhook(State(state): State<AppState>, headers: HeaderMap, body:
         }
         None => {
             error!("no signature found");
-            (
-                StatusCode::BAD_REQUEST,
-                "no signature found".to_string(),
-            )
+            (StatusCode::BAD_REQUEST, "no signature found".to_string())
         }
     }
 }
