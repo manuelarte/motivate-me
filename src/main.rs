@@ -21,10 +21,10 @@ use axum::{
     routing::{get, post},
 };
 use config::Config;
+use dotenv::dotenv;
 use serde::Deserialize;
 use std::io;
 use std::sync::Arc;
-use dotenv::dotenv;
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, instrument};
 
