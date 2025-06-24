@@ -1,11 +1,12 @@
+mod animation;
 mod message_handler;
 mod message_listener;
 mod payloads;
 #[cfg(target_arch = "arm")]
 mod raspberrypi_animation;
 mod signature_validator;
-mod animation;
 
+use crate::animation::get_animation;
 use crate::message_handler::{ActorMessage, MessageHandler};
 use crate::message_listener::MessageListener;
 use crate::payloads::{ForkPayload, StarPayload};
@@ -25,7 +26,6 @@ use std::io;
 use std::sync::Arc;
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, instrument};
-use crate::animation::get_animation;
 
 #[derive(Debug)]
 pub enum Error {

@@ -1,8 +1,8 @@
+use crate::animation::Animation;
 use rppal::gpio::Gpio;
 use rppal::system::DeviceInfo;
 use std::thread;
 use std::time::Duration;
-use crate::animation::Animation;
 
 #[derive(Debug)]
 pub struct RaspberryPiAnimation {}

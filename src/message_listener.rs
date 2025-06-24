@@ -1,9 +1,9 @@
-use std::sync::Arc;
 use crate::Error;
+use crate::animation::Animation;
 use crate::message_handler::ActorMessage;
+use std::sync::Arc;
 use tokio::sync::mpsc;
 use tracing::instrument;
-use crate::animation::Animation;
 
 #[derive(Debug)]
 pub struct MessageListener {
