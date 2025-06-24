@@ -1,0 +1,65 @@
+---
+name: rust
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+permissions:
+  contents: read
+  # Optional: allow read access to pull request.
+  # Use with `only-new-issues` option.
+  # pull-requests: read
+
+jobs:
+  build:
+    name: build on - ${{ matrix.platform.os }}
+    runs-on: ${{ matrix.platform.os }}
+    strategy:
+      matrix:
+        BUILD_TARGET: [release] # refers to a cargo profile
+        platform:
+          - os_name: ubuntu-latest
+            target: armv7-unknown-linux-gnueabihf
+    env:
+      TARGET: ${{ matrix.platform.target }}
+      OS: ${{ matrix.platform.os }}
+    outputs:
+      release_built: ${{ steps.set-output.outputs.release_built }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install and configure dependencies
+        run: |
+            # dependencies are only needed on ubuntu as that's the only place where
+            # we make cross-compilation
+            if [[ $OS =~ ^ubuntu.*$ ]]; then
+              sudo apt-get install -qq crossbuild-essential-arm64 crossbuild-essential-armhf
+            fi
+
+            # some additional configuration for cross-compilation on linux
+            cat >>~/.cargo/config <<EOF
+            [target.aarch64-unknown-linux-gnu]
+            linker = "aarch64-linux-gnu-gcc"
+            [target.aarch64-unknown-linux-musl]
+            linker = "aarch64-linux-gnu-gcc"
+            [target.armv7-unknown-linux-gnueabihf]
+            linker = "arm-linux-gnueabihf-gcc"
+            [target.armv7-unknown-linux-musleabihf]
+            linker = "arm-linux-gnueabihf-gcc"
+            [target.arm-unknown-linux-gnueabihf]
+            linker = "arm-linux-gnueabihf-gcc"
+            [target.arm-unknown-linux-musleabihf]
+            linker = "arm-linux-gnueabihf-gcc"
+            EOF
+      - name: Install rust target
+        run: rustup target add $TARGET
+      - name: Build binaries in "${{ matrix.BUILD_TARGET }}" mode
+        run: cargo build --profile ${{ matrix.BUILD_TARGET }}
+      - name: Run tests in "${{ matrix.BUILD_TARGET }}" mode
+        run: cargo test --profile ${{ matrix.BUILD_TARGET }}
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: motivate-me
+          path: target/${{ matrix.platform.target }}/${{ matrix.BUILD_TARGET }}/motivate-me
