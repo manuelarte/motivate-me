@@ -58,7 +58,7 @@ jobs:
       - name: Run tests in "${{ matrix.build_target }}" mode for target "${{ matrix.platform.target }}".
         run: cargo test --profile ${{ matrix.build_target }}
       - name: Build binaries in "${{ matrix.build_target }}" mode for target "${{ matrix.platform.target }}".
-        run: cargo build --profile ${{ matrix.build_target }} --target "${{ matrix.platform.target }}".
+        run: cargo build --profile ${{ matrix.build_target }} --target "${{ matrix.platform.target }}"
       - name: List target.
         run: find ./target
       - name: Upload release artifact for target "${{ matrix.platform.target }}".
