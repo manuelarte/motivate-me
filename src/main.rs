@@ -1,10 +1,8 @@
 mod message_handler;
 mod message_listener;
-mod notifier;
 mod payloads;
-#[cfg(target_arch = "arm")]
-mod raspberrypi_notifier;
 mod signature_validator;
+mod raspberrypi_animation;
 
 use crate::message_handler::{ActorMessage, MessageHandler};
 use crate::message_listener::MessageListener;
