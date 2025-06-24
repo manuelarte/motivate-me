@@ -87,7 +87,7 @@ async fn main() -> Result<(), Error> {
         axum::serve(listener, app).await
     };
     tokio::spawn(async move { actor.run().await });
-    
+
     tokio::join!(backend);
 
     Ok(())

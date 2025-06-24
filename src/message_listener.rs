@@ -17,7 +17,7 @@ impl MessageListener {
                 tracing::info!("Running task ActorMessage::MotivationReceived...");
             }
         }
-        
+
         tracing::info!("Finished task ActorMessage::MotivationReceived...");
         Ok(())
     }
