@@ -55,13 +55,13 @@ jobs:
             EOF
       - name: Install rust target
         run: rustup target add $TARGET
-      - name: Run tests in "${{ matrix.build_target }}" mode
+      - name: Run tests in "${{ matrix.build_target }}" mode for target "$TARGET"
         run: cargo test --profile ${{ matrix.build_target }}
-      - name: Build binaries in "${{ matrix.build_target }}" mode
+      - name: Build binaries in "${{ matrix.build_target }}" mode for target "$TARGET"
         run: cargo build --profile ${{ matrix.build_target }} --target $TARGET
       - name: List target
         run: find ./target
-      - name: Upload release artifact
+      - name: Upload release artifact for target "$TARGET"
         uses: actions/upload-artifact@v4
         with:
           name: motivate-me
