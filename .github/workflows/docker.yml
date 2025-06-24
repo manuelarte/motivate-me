@@ -39,7 +39,7 @@ jobs:
           dockerfile: Dockerfile
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        uses: docker/login-action@3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -53,7 +53,7 @@ jobs:
 
       - name: Build and push Docker image
         id: push
-        uses: docker/build-push-action@6
+        uses: docker/build-push-action@v6
         with:
           platforms: ${{ matrix.platform }}
           context: .
