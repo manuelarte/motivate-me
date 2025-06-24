@@ -193,7 +193,7 @@ mod tests {
                 "issue_events_url": "https://api.github.com/repos/manuelarte/motivate-me/issues/events{/number}",
                 "events_url": "https://api.github.com/repos/manuelarte/motivate-me/events",
                 "assignees_url": "https://api.github.com/repos/manuelarte/motivate-me/assignees{/user}",
-                "braches_url": "https://api.github.com/repos/manuelarte/motivate-me/branches{/branch}",
+                "branches_url": "https://api.github.com/repos/manuelarte/motivate-me/branches{/branch}",
                 "tags_url": "https://api.github.com/repos/manuelarte/motivate-me/tags",
                 "blobs_url": "https://api.github.com/repos/manuelarte/motivate-me/git/blobs{/sha}",
                 "git_tags_url": "https://api.github.com/repos/manuelarte/motivate-me/git/tags{/sha}",
