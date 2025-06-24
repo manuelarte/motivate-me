@@ -1,0 +1,4 @@
+debug = false
+host = "localhost:3000"
+environment = "test"
+secret = "mysecret"

@@ -1,0 +1,2 @@
+[files]
+extend-exclude = ["resources/http-client.env.json"]
