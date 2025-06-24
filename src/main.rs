@@ -24,6 +24,7 @@ use config::Config;
 use serde::Deserialize;
 use std::io;
 use std::sync::Arc;
+use dotenv::dotenv;
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, instrument};
 
@@ -48,9 +49,10 @@ struct AppState {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
+    dotenv().ok();
     let app_config = Config::builder()
         // Add in `./Settings.toml`
-        .add_source(config::File::with_name("Settings"))
+        .add_source(config::File::with_name("Settings").required(false))
         // Add in settings from the environment (with a prefix of APP)
         // Eg.. `APP_DEBUG=1 ./target/app` would set the `debug` key
         .add_source(config::Environment::with_prefix("MOTIVATE_ME"))
