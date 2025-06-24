@@ -2,6 +2,7 @@ use rppal::gpio::Gpio;
 use rppal::system::DeviceInfo;
 use std::thread;
 use std::time::Duration;
+use crate::animation::Animation;
 
 #[derive(Debug)]
 pub struct RaspberryPiAnimation {}
@@ -12,8 +13,8 @@ impl RaspberryPiAnimation {
     }
 }
 
-impl RaspberryPiAnimation {
-    pub fn animate(&self, _: String) {
+impl Animation for RaspberryPiAnimation {
+    fn animate(&self) {
         // Gpio uses BCM pin numbering. BCM GPIO 23 is tied to physical pin 16.
         const GPIO_LED: u8 = 23;
         println!(

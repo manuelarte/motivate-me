@@ -1,8 +1,10 @@
 mod message_handler;
 mod message_listener;
 mod payloads;
-mod signature_validator;
+#[cfg(target_arch = "arm")]
 mod raspberrypi_animation;
+mod signature_validator;
+mod animation;
 
 use crate::message_handler::{ActorMessage, MessageHandler};
 use crate::message_listener::MessageListener;
@@ -23,6 +25,7 @@ use std::io;
 use std::sync::Arc;
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, instrument};
+use crate::animation::get_animation;
 
 #[derive(Debug)]
 pub enum Error {
@@ -62,7 +65,8 @@ async fn main() -> Result<(), Error> {
         .init();
 
     let (tx, rx) = mpsc::channel::<ActorMessage>(1);
-    let mut actor = MessageListener::new(rx);
+    let animation = get_animation(app_config.environment.as_str());
+    let mut actor = MessageListener::new(rx, animation);
 
     let actor_handler = MessageHandler::new(tx);
 
