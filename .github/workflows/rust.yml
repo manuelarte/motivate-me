@@ -20,7 +20,7 @@ jobs:
       matrix:
         BUILD_TARGET: [release] # refers to a cargo profile
         platform:
-          - os_name: ubuntu-latest
+          - os: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
     env:
       TARGET: ${{ matrix.platform.target }}
