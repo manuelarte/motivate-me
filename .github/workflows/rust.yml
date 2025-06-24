@@ -18,7 +18,8 @@ jobs:
     runs-on: ${{ matrix.platform.os }}
     strategy:
       matrix:
-        BUILD_TARGET: [release] # refers to a cargo profile
+        build_target:
+          - release # refers to a cargo profile
         platform:
           - os: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
@@ -54,10 +55,12 @@ jobs:
             EOF
       - name: Install rust target
         run: rustup target add $TARGET
-      - name: Build binaries in "${{ matrix.BUILD_TARGET }}" mode
-        run: cargo build --profile ${{ matrix.BUILD_TARGET }}
-      - name: Run tests in "${{ matrix.BUILD_TARGET }}" mode
-        run: cargo test --profile ${{ matrix.BUILD_TARGET }}
+      - name: Run tests in "${{ matrix.build_target }}" mode
+        run: cargo test --profile ${{ matrix.build_target }}
+      - name: Build binaries in "${{ matrix.build_target }}" mode
+        run: cargo build --profile ${{ matrix.build_target }} --target $TARGET
+      - name: List target
+        run: find ./target
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
