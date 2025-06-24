@@ -1,5 +1,6 @@
 POST {{host}}/github_webhook
 X-GitHub-Event: star
+X-Hub-Signature-256: sha256=xxxx
 Content-Type: application/json
 
 {

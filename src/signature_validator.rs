@@ -3,6 +3,7 @@ use hmac::{Hmac, Mac};
 use sha2::Sha256;
 use std::fmt::Debug;
 use std::sync::Arc;
+use tracing::warn;
 
 pub trait SignatureValidator: Send + Sync + Debug + 'static {
     fn validate(&self, payload: &[u8], expected_signature: &str) -> bool;
@@ -19,6 +20,7 @@ impl AlwaysTrueValidator {
 
 impl SignatureValidator for AlwaysTrueValidator {
     fn validate(&self, _: &[u8], _: &str) -> bool {
+        warn!("skipping signature validator");
         true
     }
 }
@@ -50,8 +52,8 @@ impl SignatureValidator for Rsa256SignatureValidator {
 
 pub fn get_signature_validator(cfg: &AppConfig) -> Arc<dyn SignatureValidator> {
     match cfg.environment.as_str() {
-        "production" => Arc::new(AlwaysTrueValidator::new()),
-        _ => Arc::new(Rsa256SignatureValidator::new(cfg.secret.as_str())),
+        "production" => Arc::new(Rsa256SignatureValidator::new(cfg.secret.as_str())),
+        _ => Arc::new(AlwaysTrueValidator::new()),
     }
 }
 

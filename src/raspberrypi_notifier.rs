@@ -23,7 +23,7 @@ impl Notifier for RaspberryPiNotifier {
         );
 
         let mut pin = Gpio::new().unwrap().get(GPIO_LED).unwrap().into_output();
-        thread::spawn(|| {
+        thread::spawn(move || {
             for i in 1..10 {
                 // Blink the LED by setting the pin's logic level high for 500 ms.
                 pin.set_high();
