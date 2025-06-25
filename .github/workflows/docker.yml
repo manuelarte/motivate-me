@@ -6,7 +6,7 @@ on:
     workflows: ["rust"]
     branches:
       - main
-      - dev
+      - fix/docker-workflow
     types:
       - completed
 
