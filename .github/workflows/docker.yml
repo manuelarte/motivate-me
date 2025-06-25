@@ -1,13 +1,13 @@
 ---
-
 name: docker
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["rust"]
     branches:
       - main
-      - dev
+      - fix/docker-workflow
     types:
       - completed
 
@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Dockerfile lint
-        uses: hadolint/hadolint-action@v3
+        uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: Dockerfile
 
@@ -47,7 +47,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
