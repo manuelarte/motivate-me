@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/manuelarte/motivate-me/compare/v0.1.0...v0.2.0) (2025-06-25)
+
+
+### Features
+
+* first commit ([a9cd5a5](https://github.com/manuelarte/motivate-me/commit/a9cd5a5e195264f78a25d5d58b9d6e58adb5d7a3))
+
 ## 0.1.0 (2025-06-25)
 
 
