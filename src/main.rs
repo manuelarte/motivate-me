@@ -2,7 +2,7 @@ mod animation;
 mod message_handler;
 mod message_listener;
 mod payloads;
-#[cfg(target_arch = "arm")]
+#[cfg(target_arch = "aarch64")]
 mod raspberrypi_animation;
 mod signature_validator;
 
