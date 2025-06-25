@@ -9,7 +9,8 @@ Every time you ⭐ or 🍴 my repositories, I get a notification in my [Raspberr
 
 ## How It Works
 
-There is a Raspberry Pi Model 3+ running [Axum][axum] web server. A GitHub webhook is connected to this repository, and listening to the `star` and `fork` events.
+There is a Raspberry Pi Model 3+ running [Axum][axum] web server.
+A GitHub webhook is connected to this repository, listening to the `star` and `fork` events.
 
 When one of the event is triggered, the webhook gets called and blinks a LED. Below you can find a video showing it working:
 
