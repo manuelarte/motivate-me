@@ -28,9 +28,10 @@ impl Animation for RaspberryPiAnimation {
             // Blink the LED by setting the pin's logic level high for 500 ms.
             trace!("setting led high...");
             pin.set_high();
-            thread::sleep(Duration::from_millis(1000));
+            thread::sleep(Duration::from_millis(500));
             trace!("setting led low...");
             pin.set_low();
+            thread::sleep(Duration::from_millis(500));
         }
     }
 }
