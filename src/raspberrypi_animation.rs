@@ -3,7 +3,7 @@ use rppal::gpio::Gpio;
 use rppal::system::DeviceInfo;
 use std::thread;
 use std::time::Duration;
-use tracing::debug;
+use tracing::{debug, trace};
 
 #[derive(Debug)]
 pub struct RaspberryPiAnimation {}
@@ -26,10 +26,10 @@ impl Animation for RaspberryPiAnimation {
         let mut pin = Gpio::new().unwrap().get(GPIO_LED).unwrap().into_output();
         for _ in 1..5 {
             // Blink the LED by setting the pin's logic level high for 500 ms.
-            debug!("Setting led high...");
+            trace!("setting led high...");
             pin.set_high();
             thread::sleep(Duration::from_millis(1000));
-            debug!("Setting led low...");
+            trace!("setting led low...");
             pin.set_low();
         }
     }
