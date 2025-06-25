@@ -26,8 +26,8 @@ use serde::Deserialize;
 use std::io;
 use std::sync::Arc;
 use tokio::sync::mpsc;
-use tracing::{debug, error, info, instrument};
 use tracing::metadata::LevelFilter;
+use tracing::{debug, error, info, instrument};
 
 #[derive(Debug)]
 pub enum Error {
