@@ -24,11 +24,11 @@ impl Animation for RaspberryPiAnimation {
         const GPIO_LED: u8 = 23;
 
         let mut pin = Gpio::new().unwrap().get(GPIO_LED).unwrap().into_output();
-        for _ in 1..20 {
+        for _ in 1..5 {
             // Blink the LED by setting the pin's logic level high for 500 ms.
             debug!("Setting led high...");
             pin.set_high();
-            thread::sleep(Duration::from_millis(200));
+            thread::sleep(Duration::from_millis(1000));
             debug!("Setting led low...");
             pin.set_low();
         }
