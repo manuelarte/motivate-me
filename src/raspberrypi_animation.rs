@@ -9,6 +9,10 @@ pub struct RaspberryPiAnimation {}
 
 impl RaspberryPiAnimation {
     pub fn new() -> Self {
+        info!(
+            "Blinking an LED on a {}.",
+            DeviceInfo::new().unwrap().model()
+        );
         Self {}
     }
 }
@@ -17,10 +21,6 @@ impl Animation for RaspberryPiAnimation {
     fn animate(&self) {
         // Gpio uses BCM pin numbering. BCM GPIO 23 is tied to physical pin 16.
         const GPIO_LED: u8 = 23;
-        println!(
-            "Blinking an LED on a {}.",
-            DeviceInfo::new().unwrap().model()
-        );
 
         let mut pin = Gpio::new().unwrap().get(GPIO_LED).unwrap().into_output();
         thread::spawn(move || {
