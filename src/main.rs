@@ -49,6 +49,7 @@ struct AppState {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
+    info!("Starting application to react to stars and forks");
     dotenv().ok();
     let app_config = Config::builder()
         // Add in `./Settings.toml`

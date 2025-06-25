@@ -3,15 +3,15 @@ use rppal::gpio::Gpio;
 use rppal::system::DeviceInfo;
 use std::thread;
 use std::time::Duration;
-use tracing::info;
+use tracing::debug;
 
 #[derive(Debug)]
 pub struct RaspberryPiAnimation {}
 
 impl RaspberryPiAnimation {
     pub fn new() -> Self {
-        info!(
-            "Blinking an LED on a {}.",
+        debug!(
+            "Blinking a LED on a {}.",
             DeviceInfo::new().unwrap().model()
         );
         Self {}
