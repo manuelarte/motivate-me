@@ -20,8 +20,8 @@ alt="video of led blinking after staring the repo" width="240" height="180" bord
 
 ## Technologies
 
-[![Rust](https://img.shields.io/badge/Rust-%23000000.svg?e&logo=rust&logoColor=white)](#)
-[![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](#)
+[![Rust](https://img.shields.io/badge/Rust-%23000000.svg?e&logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/)
 
 [raspberry-pi]: https://www.raspberrypi.com/
 [axum]: https://docs.rs/axum/latest/axum/
