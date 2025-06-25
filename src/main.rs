@@ -27,6 +27,7 @@ use std::io;
 use std::sync::Arc;
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, instrument};
+use tracing::metadata::LevelFilter;
 
 #[derive(Debug)]
 pub enum Error {
@@ -62,8 +63,14 @@ async fn main() -> Result<(), Error> {
         .try_deserialize::<AppConfig>()
         .unwrap();
 
+    let mut level_filter = LevelFilter::INFO;
+    if app_config.debug {
+        level_filter = LevelFilter::DEBUG
+    }
+
     tracing_subscriber::fmt()
         .with_writer(io::stderr)
+        .with_max_level(level_filter)
         .with_line_number(true)
         .init();
 
