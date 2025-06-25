@@ -1,4 +1,4 @@
-#[cfg(target_arch = "arm")]
+#[cfg(target_arch = "aarch64")]
 use crate::raspberrypi_animation::RaspberryPiAnimation;
 use std::fmt::Debug;
 use std::sync::Arc;
@@ -23,7 +23,7 @@ impl Animation for MockAnimation {
 
 pub fn get_animation(environment: &str) -> Arc<dyn Animation> {
     match environment {
-        #[cfg(target_arch = "arm")]
+        #[cfg(target_arch = "aarch64")]
         "production" => Arc::new(RaspberryPiAnimation::new()),
         _ => Arc::new(MockAnimation {}),
     }

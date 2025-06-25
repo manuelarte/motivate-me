@@ -2,7 +2,7 @@ mod animation;
 mod message_handler;
 mod message_listener;
 mod payloads;
-#[cfg(target_arch = "arm")]
+#[cfg(target_arch = "aarch64")]
 mod raspberrypi_animation;
 mod signature_validator;
 
@@ -27,6 +27,7 @@ use std::io;
 use std::sync::Arc;
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, instrument};
+use tracing::metadata::LevelFilter;
 
 #[derive(Debug)]
 pub enum Error {
@@ -49,6 +50,7 @@ struct AppState {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
+    info!("Starting application to react to stars and forks");
     dotenv().ok();
     let app_config = Config::builder()
         // Add in `./Settings.toml`
@@ -61,8 +63,14 @@ async fn main() -> Result<(), Error> {
         .try_deserialize::<AppConfig>()
         .unwrap();
 
+    let mut level_filter = LevelFilter::INFO;
+    if app_config.debug {
+        level_filter = LevelFilter::DEBUG
+    }
+
     tracing_subscriber::fmt()
         .with_writer(io::stderr)
+        .with_max_level(level_filter)
         .with_line_number(true)
         .init();
 

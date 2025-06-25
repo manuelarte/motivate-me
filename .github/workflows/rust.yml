@@ -22,7 +22,7 @@ jobs:
           - release # refers to a cargo profile
         platform:
           - os: ubuntu-latest
-            target: armv7-unknown-linux-gnueabihf
+            target: aarch64-unknown-linux-gnu
     env:
       TARGET: ${{ matrix.platform.target }}
       OS: ${{ matrix.platform.os }}
