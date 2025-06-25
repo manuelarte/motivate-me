@@ -14,8 +14,8 @@ A GitHub webhook is connected to this repository, listening to the `star` and `f
 
 When one of the event is triggered, the webhook gets called and blinks a LED. Below you can find a video showing it working:
 
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=YhQUKIi9MQ8
-" target="_blank"><img src="http://img.youtube.com/vi/YhQUKIi9MQ8/0.jpg"
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=hQUKIi9MQ8Y
+" target="_blank"><img src="http://img.youtube.com/vi/hQUKIi9MQ8Y/0.jpg"
 alt="video of led blinking after staring the repo" width="240" height="180" border="10" /></a>
 
 ## Technologies
