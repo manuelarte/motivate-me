@@ -29,7 +29,7 @@ jobs:
     outputs:
       release_built: ${{ steps.set-output.outputs.release_built }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install and configure dependencies
         run: |
             # dependencies are only needed on ubuntu as that's the only place where
