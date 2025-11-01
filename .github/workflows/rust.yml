@@ -62,7 +62,7 @@ jobs:
       - name: List target.
         run: find ./target
       - name: Upload release artifact for target "${{ matrix.platform.target }}".
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: motivate-me
           path: target/${{ matrix.platform.target }}/${{ matrix.BUILD_TARGET }}/motivate-me
